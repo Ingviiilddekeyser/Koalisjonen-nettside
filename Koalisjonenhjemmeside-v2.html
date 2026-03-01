@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Koalisjonen</title>
+  <style>
+    html, body {
+      margin: 0; padding: 0; width: 100vw; min-height: 100vh;
+      background: #f6f6f6;
+      position: relative;
+      font-family: 'Times New Roman', serif;
+      color: #333;
+    }
+    body {
+      width: 100vw; min-height: 300vh;
+    }
+    /* Background image overlay with 20% opacity - scrolls with page */
+    body::before {
+      content: "";
+      position: absolute;
+      z-index: 0;
+      inset: 0;
+      background: url('images/Grottene\ på\ sproo.webp') center/cover repeat;
+      opacity: 0.2;
+      pointer-events: none;
+    }
+    main, .logo-container, .modal, .project-overlay, .image-overlay {
+      position: relative;
+      z-index: 1;
+    }
+    .logo-container {
+      display: flex; justify-content: center; padding-top: 50px; padding-bottom: 20px; position: relative;
+    }
+    .logo {
+      width: 600px; height: 600px; cursor: pointer; transition: all 0.3s;
+    }
+    .logo:hover { transform: scale(1.08);}
+    .logo img { width:100%; height:100%; object-fit: contain;}
+    .modal {
+      display: none; position: absolute; top: 10%; left: 50%; transform: translate(-50%, -50%);
+      background: radial-gradient(circle at center, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0) 30%);
+     
+      border-radius: 50%; width: 350px; height: 200px;
+      z-index: 1000; align-items: center; justify-content: center;
+    }
+    .modal.active { display: flex;}
+    .modal-content { text-align: center; max-width:350px;}
+    .modal-content h1 {
+      font-size:3.5em; font-style:italic; color:#5d00ff; line-height:1.4; text-align:center;
+    }
+    .content {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 40px 20px 0 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      text-align: left;
+      margin: 0 0 18px 0;
+    }
+    h3 { font-size: 1.25em; margin-top: 35px;}
+    h2 { font-size: 1.4em;}
+    .content > * { width:100%; max-width: 100%;}
+    /* Paragraphs: white background just behind text */
+    p {
+      display: inline;
+      background: white;
+      box-decoration-break: clone;
+      padding: 2px 6px;
+     
+      line-height: 1.8;
+      margin-bottom: 15px;
+      font-size: 1.01em;
+      box-shadow: 0 2px 14px rgba(0,0,0,0.03);
+      word-break: break-word;
+    }
+    .para-wrap { margin-bottom: 10px; width: 100%;}
+    
+    a { color: #0066cc; text-decoration: none; cursor: pointer; transition: all .3s;}
+    a:hover {text-decoration:underline; opacity:.7;}
+    
+    .project-link { text-align: left; color: #0066cc; cursor: pointer; font-weight: normal;}
+    
+    .project-overlay {
+      display:none;
+      position:fixed;
+      top:50%;left:50%;transform:translate(-50%,-50%);
+      background:white;
+      border:1px solid black;
+      z-index:1001;
+      padding:40px 20px;
+      max-width:600px; width:90%; max-height:80vh; overflow-y: auto;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+    }
+    .project-overlay.active {display:block;}
+    .project-overlay-close {
+      position:absolute;top:20px;right:20px;font-size:2em;cursor:pointer;
+      line-height:1;color:#000;
+    }
+    .project-overlay-close:hover{opacity:.7;}
+    .project-image {
+      width: 200px; height: 200px; margin: 0 auto 30px;
+      display: flex; align-items:center; justify-content:center;
+      animation: rotate 4s linear infinite;
+    }
+    .project-image img { width:100%; height:100%; object-fit:cover;}
+    @keyframes rotate { from {transform:rotate(0deg);} to {transform:rotate(360deg);} }
+    
+    .overlay-backdrop {
+      display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+      background:rgba(0,0,0,0.3); z-index: 999;
+    }
+    .overlay-backdrop.active {display:block;}
+    
+    /* Carousel */
+    .carousel-container { display:flex; align-items:center; justify-content:center; gap:32px; margin-top: 46px; margin-bottom: 10px;}
+    .carousel-arrow { font-size:2em; cursor:pointer; user-select:none; transition:.3s; color:#333;}
+    .carousel-arrow:hover { opacity:.6;}
+    .carousel-cards { position: relative; width: 272px; height: 190px;}
+    .carousel-card {
+      position:absolute;width:100%;height:100%;opacity:0;
+      transition: all 0.5s; pointer-events:none;
+      background:white; border:2px solid #ccc; overflow:hidden;
+    }
+    .carousel-card.active { opacity:1; pointer-events:auto; z-index:10; transform:translateX(0) rotateZ(0deg);}
+    .carousel-card.prev { opacity:.3; transform:translateX(-80px) rotateZ(-8deg) scale(0.92); z-index:5;}
+    .carousel-card.next { opacity:.3; transform:translateX(80px) rotateZ(8deg) scale(0.92); z-index:5;}
+    .carousel-card img { width:100%; height:100%; object-fit:cover;}
+    
+    /* New image overlay (for button below cards) */
+    .image-overlay {
+      display:none; justify-content:center; align-items:center;
+      position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+      background: transparent;
+      box-shadow: none; padding:0; border:none; overflow:hidden; z-index:1002;
+    }
+    .image-overlay.active {display:flex;}
+    .image-overlay img {
+      width: 100%; height: 100%; object-fit: contain; display:block; cursor:pointer;
+    }
+    
+    .show-bg-button {
+      display: block; margin: 40px 0 0 0; padding: 8px 12px;
+      background: #222; color: #fff; border: none; border-radius: 4px;
+      cursor: pointer; font-size: 1em; letter-spacing: 0.01em;
+      font-family: 'Times New Roman', serif;
+      box-shadow: 0 2px 16px rgba(0,0,0,.08); transition: background 0.22s;
+    }
+    .show-bg-button:hover { background:#959595; }
+
+    /* RESPONSIVE DESIGN */
+    @media (max-width: 800px) {
+      .content { max-width:96vw; padding-left: 4vw; padding-right: 4vw;}
+      .carousel-cards { width: 220px; height: 270px; }
+      .project-image { width: 120px; height: 120px;}
+      .modal { width: 78vw; height: 78vw; max-width: 340px; max-height:340px;}
+    }
+    @media (max-width:450px) {
+      .content { padding: 18px 2vw; }
+      .carousel-cards { width: 92vw; height: 190px; }
+      .show-bg-button { margin-top: 22px; font-size:1em; padding:11px 7vw;}
+      .modal { width: 92vw; height: 92vw; min-width:220px; min-height:220px;}
+      .image-overlay {width:99vw; height:97vh;}
+      h2,h3,h4 { font-size: 1em;}
+      .project-image { width: 70vw; height: 70vw;}
+      .carousel-arrow { font-size: 1.5em;}
+    }
+  </style>
+</head>
+<body>
+  <div class="logo-container">
+    <img src="images/logo_nettside.svg" alt="Koalisjonen Logo" class="logo" id="logo">
+  </div>
+  <div class="modal" id="modal">
+    <div class="modal-content">
+      <h1>Velkommen til Koalisjonens hjemmeside</h1>
+    </div>
+  </div>
+  <main class="content">
+    <div class="para-wrap">
+      <h3>◎ Om Koalisjonen</h3>
+      <p>
+        Koalisjonen er et designkollektiv uten klare rammer, mål eller definisjon. Det eneste vi vet er at vi vil gjøre morsomme ting, utforske alt og ingenting, og at koalisjonen består av menneskene
+        <a href="#">Benjamin</a>, <a href="#">Maija</a>, <a href="#">Herman</a>, <a href="#">Ingvild</a> og <a href="#">Boye</a>.
+      </p>
+    </div>
+    <div class="para-wrap">
+      <p>Noen ganger blogger vi på <a href="#">Are.na</a></p>
+    </div>
+    <div class="para-wrap">
+      <h3>◉ Manifest</h3>
+      <p>Man skal ikke plage andre, man skal være grei og snill, og for øvrig kan man gjøre hva man vil (fakk Zuckerberg, Musk, Altman og Thiel +++)</p>
+    </div>
+    <div class="para-wrap">
+      <h3>⁕ Prosjekter</h3>
+      <p class="project-link" id="projectLink">Se-DET|DISC+FAM|Blablafon|LPBO|Ripe</p>
+    </div>
+    <div class="para-wrap">
+      <h3>⁂ Idédagbok (en anti-portfølje)</h3>
+      <p>Dette er en anti-portfølje med ideer vi har lyst til å gjøre. Vil du at vi skal utføre en av de med deg/på vegne av deg/ for deg? Ta kontakt med oss!</p>
+    </div>
+    <div class="carousel-container">
+      <div class="carousel-arrow left-arrow" id="leftArrow">←</div>
+      <div class="carousel-cards" id="carouselCards">
+        <div class="carousel-card active">
+          <img src="images/Idekort01.svg" alt="Idé 1">
+        </div>
+        <div class="carousel-card next">
+          <img src="images/Idekort02.svg" alt="Idé 2">
+        </div>
+        <div class="carousel-card">
+          <img src="images/Idekort03.svg" alt="Idé 3">
+        </div>
+        <div class="carousel-card">
+          <img src="images/Idekort04.svg" alt="Idé 4">
+        </div>
+        <div class="carousel-card">
+          <img src="images/Idekort05.svg" alt="Idé 5">
+        </div>
+        <div class="carousel-card">
+          <img src="images/Idekort06.svg" alt="Idé 6">
+        </div>
+        <div class="carousel-card">
+          <img src="images/Idekort07.svg" alt="Idé 7">
+        </div>
+        <div class="carousel-card">
+          <img src="images/Idekort08.svg" alt="Idé 8">
+        </div>
+        <div class="carousel-card">
+          <img src="images/Idekort09.svg" alt="Idé 9">
+        </div>
+        <div class="carousel-card">
+          <img src="images/Idekort10.svg" alt="Idé 10">
+        </div>
+      </div>
+      <div class="carousel-arrow right-arrow" id="rightArrow">→</div>
+    </div>
+    <button class="show-bg-button" id="showBgBtn">🖼️</button>
+  </main>
+  <div class="overlay-backdrop" id="overlayBackdrop"></div>
+  <div class="project-overlay" id="projectOverlay">
+    <div class="project-overlay-close" id="projectClose">✕</div>
+    <div class="project-image">
+      <img src="images/Blank_cd.png" alt="Se-DET Project">
+    </div>
+    <h2>Se-DET|DISC+FAM|Blablafon|LPBO|Ripe</h2>
+    <p>er en <strong>impuls</strong> om å skape et <strong>lekeformat</strong>, et fritt rom, en uformell inngang til nye <strong>signaler</strong> fra folk og fe i oslo by med hensikt om å <strong>kollektivt</strong> gi deg <strong>øresus</strong></p>
+    <p>Fristen for å sende inn bidrag har gått ut, og første utgave av Se-DET|DISC+FAM|Blablafon|LPBO|Ripe kommer ut i slutten av Mai</p>
+    <p>______________________________________________________________________</p>
+    <p><strong>Dato:</strong> TBA<br><strong>Sted:</strong> TBA</p>
+  </div>
+  <div class="image-overlay" id="imageOverlay">
+    <img src="images/grottene_spro-normal.webp" alt="Bakgrunns-bilde" id="imageOverlayImg">
+  </div>
+  <script>
+    const logo = document.getElementById('logo');
+    const modal = document.getElementById('modal');
+    logo.addEventListener('click', () => {modal.classList.toggle('active');});
+    
+    const projectLink = document.getElementById('projectLink');
+    const projectOverlay = document.getElementById('projectOverlay');
+    const projectClose = document.getElementById('projectClose');
+    const overlayBackdrop = document.getElementById('overlayBackdrop');
+    projectLink.addEventListener('click', () => {
+      projectOverlay.classList.add('active');
+      overlayBackdrop.classList.add('active');
+    });
+    projectClose.addEventListener('click', closeProjectOverlay);
+    overlayBackdrop.addEventListener('click', closeProjectOverlay);
+    function closeProjectOverlay() {
+      projectOverlay.classList.remove('active');
+      overlayBackdrop.classList.remove('active');
+      document.getElementById('imageOverlay').classList.remove('active');
+    }
+    
+    const leftArrow = document.getElementById('leftArrow');
+    const rightArrow = document.getElementById('rightArrow');
+    const carouselCards = document.getElementById('carouselCards');
+    let currentIndex = 0;
+    const cards = carouselCards.querySelectorAll('.carousel-card');
+    const totalCards = cards.length;
+    
+    function updateCarousel() {
+      cards.forEach((card, index) => {
+        card.classList.remove('active', 'prev', 'next');
+        if (index === currentIndex) card.classList.add('active');
+        else if (index === (currentIndex - 1 + totalCards) % totalCards) card.classList.add('prev');
+        else if (index === (currentIndex + 1) % totalCards) card.classList.add('next');
+      });
+    }
+    rightArrow.addEventListener('click', () => {
+      currentIndex = (currentIndex + 1) % totalCards; updateCarousel();
+    });
+    leftArrow.addEventListener('click', () => {
+      currentIndex = (currentIndex - 1 + totalCards) % totalCards; updateCarousel();
+    });
+    updateCarousel();
+
+    const showBgBtn = document.getElementById('showBgBtn');
+    const imageOverlay = document.getElementById('imageOverlay');
+    showBgBtn.addEventListener('click', () => {
+      imageOverlay.classList.add('active');
+      overlayBackdrop.classList.add('active');
+    });
+    document.getElementById('imageOverlayImg').addEventListener('click', () => {
+      imageOverlay.classList.remove('active');
+      overlayBackdrop.classList.remove('active');
+    });
+
+    window.addEventListener('keydown', function(e){
+      if(e.key === "Escape") {
+        modal.classList.remove('active');
+        projectOverlay.classList.remove('active');
+        imageOverlay.classList.remove('active');
+        overlayBackdrop.classList.remove('active');
+      }
+    });
+  </script>
+</body>
+</html>
