@@ -184,20 +184,22 @@
       <h3>◎ Om Koalisjonen</h3>
       <p>
         Koalisjonen er et designkollektiv uten klare rammer, mål eller definisjon. Det eneste vi vet er at vi vil gjøre morsomme ting, utforske alt og ingenting, og at koalisjonen består av menneskene
-        <a href="#">Benjamin</a>, <a href="#">Maija</a>, <a href="#">Herman</a>, <a href="#">Ingvild</a> og <a href="#">Boye</a>.
+        <a href="https://www.benjaminromm.no/">Benjamin</a>, <a href="https://maijahauger.com/">Maija</a>, <a href="https://www.instagram.com/herman_billett/">Herman</a>, <a href="https://ingvilddekeyser.no/">Ingvild</a> og <a href="https://www.instagram.com/lilleboye/">Boye</a>.
       </p>
     </div>
     <div class="para-wrap">
-      <p>Noen ganger blogger vi på <a href="#">Are.na</a></p>
+      <p>Noen ganger blogger vi på <a href="https://www.are.na/benjamin-romm/k-o-a-l-i-s-j-o-n-e-n">Are.na</a></p>
     </div>
+      <div class="para-wrap">
+      <h3>⁕ Prosjekter</h3>
+      <p class="project-link" id="projectLink"><a href="fotnoter.html">Fotnoter</a></p>
+    </div>
+    
     <div class="para-wrap">
       <h3>◉ Manifest</h3>
       <p>Man skal ikke plage andre, man skal være grei og snill, og for øvrig kan man gjøre hva man vil (fakk Zuckerberg, Musk, Altman og Thiel +++)</p>
     </div>
-    <div class="para-wrap">
-      <h3>⁕ Prosjekter</h3>
-      <p class="project-link" id="projectLink">Se-DET|DISC+FAM|Blablafon|LPBO|Ripe</p>
-    </div>
+  
     <div class="para-wrap">
       <h3>⁂ Idédagbok (en anti-portfølje)</h3>
       <p>Dette er en anti-portfølje med ideer vi har lyst til å gjøre. Vil du at vi skal utføre en av de med deg/på vegne av deg/ for deg? Ta kontakt med oss!</p>
@@ -240,7 +242,7 @@
     </div>
     <button class="show-bg-button" id="showBgBtn">🖼️</button>
   </main>
-  <div class="overlay-backdrop" id="overlayBackdrop"></div>
+  <!-- <div class="overlay-backdrop" id="overlayBackdrop"></div>
   <div class="project-overlay" id="projectOverlay">
     <div class="project-overlay-close" id="projectClose">✕</div>
     <div class="project-image">
@@ -254,27 +256,27 @@
   </div>
   <div class="image-overlay" id="imageOverlay">
     <img src="images/grottene_spro-normal.webp" alt="Bakgrunns-bilde" id="imageOverlayImg">
-  </div>
+  </div> -->
   <script>
     const logo = document.getElementById('logo');
     const modal = document.getElementById('modal');
     logo.addEventListener('click', () => {modal.classList.toggle('active');});
     
-    const projectLink = document.getElementById('projectLink');
-    const projectOverlay = document.getElementById('projectOverlay');
-    const projectClose = document.getElementById('projectClose');
-    const overlayBackdrop = document.getElementById('overlayBackdrop');
-    projectLink.addEventListener('click', () => {
-      projectOverlay.classList.add('active');
-      overlayBackdrop.classList.add('active');
-    });
-    projectClose.addEventListener('click', closeProjectOverlay);
-    overlayBackdrop.addEventListener('click', closeProjectOverlay);
-    function closeProjectOverlay() {
-      projectOverlay.classList.remove('active');
-      overlayBackdrop.classList.remove('active');
-      document.getElementById('imageOverlay').classList.remove('active');
-    }
+    // const projectLink = document.getElementById('projectLink');
+    // const projectOverlay = document.getElementById('projectOverlay');
+    // const projectClose = document.getElementById('projectClose');
+    // const overlayBackdrop = document.getElementById('overlayBackdrop');
+    // projectLink.addEventListener('click', () => {
+    //   projectOverlay.classList.add('active');
+    //   overlayBackdrop.classList.add('active');
+    // });
+    // projectClose.addEventListener('click', closeProjectOverlay);
+    // overlayBackdrop.addEventListener('click', closeProjectOverlay);
+    // function closeProjectOverlay() {
+    //   projectOverlay.classList.remove('active');
+    //   overlayBackdrop.classList.remove('active');
+    //   document.getElementById('imageOverlay').classList.remove('active');
+    // }
     
     const leftArrow = document.getElementById('leftArrow');
     const rightArrow = document.getElementById('rightArrow');

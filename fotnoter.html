@@ -1,0 +1,154 @@
+
+<!DOCTYPE html>
+<html lang="no">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fotnoter</title>
+  <script src="https://unpkg.com/telescopic-text/lib/index.js"></script>
+  <link href="https://unpkg.com/telescopic-text/lib/index.css" rel="stylesheet">
+
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body {
+    font-family: "Times New Roman", Times, serif;
+    background-color: #f5f5f5;
+    color: #000000;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Header / breadcrumb */
+  header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 30px 40px;
+  }
+
+  .breadcrumb {
+    font-size: 16px;
+    font-family: "Times New Roman", Times, serif;
+  }
+
+  .breadcrumb a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .breadcrumb a:hover {
+    text-decoration: underline;
+  }
+
+  .breadcrumb-separator {
+    margin: 0 4px;
+  }
+
+  /* Logo slot, top right */
+  .logo-slot {
+    width: 100px;
+    height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .logo-slot img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+  }
+
+  /* Main body text */
+  main {
+    flex: 1;
+    padding: 0 40px;
+  }
+
+  .body-text {
+    font-family: "Times New Roman", Times, serif;
+    font-size: 30px;
+    line-height: 1.4;
+    margin-top: 40px;
+    max-width: 800px;
+    padding: 40px;
+  }
+/* 
+  Rotating image, centered bottom */
+  /* .rotating-image-container {
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    padding: 40px 0 0 0;
+    overflow: hidden;
+  } */
+
+  /* .rotating-image {
+    animation: spin 8s linear infinite;
+    width: 400px;
+    height: 400px;
+    object-fit: contain;
+  } */
+
+  /* @keyframes spin {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  } */
+</style>
+</head>
+<body>
+
+  <header>
+    <nav class="breadcrumb">
+      <a href="/">Koalisjonen</a><span class="breadcrumb-separator">/</span><a href="/fotnoter.html">fotnoter</a>
+    </nav>
+
+    <div class="logo-slot">
+      <img src="images/logo_nettside.svg" alt="Logo" onerror="this.style.display='none'">
+    </div>
+  </header>
+  
+<div class="body-text"></div>
+<script>
+  const telescopicContent = createTelescopicTextFromBulletedList(`-Første utgave av
+-Fotnoter
+ -Fotnoter, et utforskende 
+ -lydmagasin
+    -lydmgasin for lydkunst og musikk
+-lanseres
+ -lanseres, 
+ -og 
+ -feires!
+   -feires! Her vil det bli anledning for å lytte på 
+  -bidragene 
+      -bidragene som vi har fått inn fra våre fine og flinke venner, og ikke minst
+  -mingle med hyggelige mennesker, og kjøpe Fotnoter på 
+  -CD
+      -CD.(begrenset opplag). Dato:
+-8.august
+ -klokken: TBA
+-i Rosteds gate 10, 0178 
+-Oslo
+ -Håper dere vil feire kvelden her med oss<3
+
+`, {separator: ' ', textMode: 'text'});
+  const container = document.getElementsByClassName("body-text")[0];
+  container.appendChild(telescopicContent);
+</script>
+<!-- 
+  <div class="rotating-image-container">
+    <img class="rotating-image" src="images/Blank_cd.png" alt="Rotating image" onerror="this.style.display='none'">
+  </div> -->
+
+</body>
+</html>
